@@ -3,10 +3,13 @@ import numpy as np
 import tkinter as tk
 
 def update_colors(mat):
+
     for i in range(4):
         for j in range(4):
             if int(entries["row" + str(i+1) + "col" + str(j+1)].get()) == 2:
                 entries["row" + str(i+1) + "col" + str(j+1)]['bg'] = 'magenta'
+    
+    root.update()
 
 def new_game():
 
