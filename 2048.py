@@ -2,6 +2,12 @@ import random
 import numpy as np
 import tkinter as tk
 
+def update_colors(mat):
+    for i in range(4):
+        for j in range(4):
+            if int(entries["row" + str(i+1) + "col" + str(j+1)].get()) == 2:
+                entries["row" + str(i+1) + "col" + str(j+1)]['bg'] = 'magenta'
+
 def new_game():
 
     # Create matrix with zeros
@@ -187,11 +193,12 @@ root = tk.Tk()
 entries = {}
 for i in range(4):
     for j in range(4):
-        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center')
-        entries["row" + str(i+1) + "col" + str(j+1)].grid(row=i, column=j)
+        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', 30), bg='Red')
+        entries["row" + str(i+1) + "col" + str(j+1)].grid(row=i, column=j, ipady=85)
 
 mat = new_game()
 set_entries()
+update_colors(mat)
 
 def move_up_command():
 
@@ -205,7 +212,6 @@ def move_up_command():
         mat = list(current_mat)
         for line in mat:
             print(line)
-        #continue
 
     # Get the current state and print it 
     status = get_current_state(mat) 
