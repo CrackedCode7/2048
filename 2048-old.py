@@ -219,92 +219,213 @@ def set_entries():
     total_score_entry.insert(0, total_score)
 
 root = tk.Tk()
-root.geometry("1450x1000+0+0")
 
 # Add total score entry and entries for the tiles
-total_score_label = tk.Label(root, text="Score", justify='center', font=('arial', 25))
-total_score_label.place(height=100, width=250, x=1100, y=0)
-
-total_score_entry = tk.Entry(root, justify='center', font=('arial', 100, 'bold'))
-total_score_entry.place(height=250, width=250, x=1100, y=100)
+total_score_entry = tk.Entry(root, justify='center', font=('arial', 30))
+total_score_entry.grid(row=0, column=4, ipady=85)
 
 entries = {}
 for i in range(4):
     for j in range(4):
-        x=j*250
-        y=i*250
-        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', 100, 'bold'), bg='Red')
-        entries["row" + str(i+1) + "col" + str(j+1)].place(height=250, width=250, x=x, y=y)
+        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', 30), bg='Red')
+        entries["row" + str(i+1) + "col" + str(j+1)].grid(row=i, column=j, ipady=85)
 
 mat = new_game()
 set_entries()
 update_colors(mat)
 
-class commands:
-    '''Creates command methods.'''
+def move_up_command(_event):
 
-    def __init__(self, name, func_name):
-        self.name = name
-        self.func_name = func_name
+    global mat
+    current_mat = list(mat)
 
-    def run_func(self, _event):
-        global mat
-        current_mat = list(mat)
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("Initially:", status)
+    print_mat(mat)
 
-        # Get the current state and print it 
-        status = get_current_state(mat) 
-        print("Initially:", status)
+    # If game not over then continue
+    if(status == 'LOST'): 
+        root.destroy()
+        return
+        
+    # Move up
+    mat, flag = move_up(mat)
+    if flag == False:
+        print("No change was made, try another move")
+        mat = list(current_mat)
+        print_mat(mat)
+        return
+
+    # Get the current state and print it 
+    status = get_current_state(mat)
+    print("After move:", status)
+
+    # If game not over then continue
+    if(status == 'GAME NOT OVER'): 
+        
         print_mat(mat)
 
-        # If game not over then continue
-        if(status == 'LOST'): 
-            root.destroy()
-            return
+        add_new(mat)
         
-        # Move
-        mat, flag = self.func_name(mat)
+        set_entries()
+        update_colors(mat)
 
-        if flag == False:
-            print("No change was made, try another move")
-            mat = list(current_mat)
-            print_mat(mat)
-            return
-
-        # Get the current state and print it 
         status = get_current_state(mat)
-        print("After move:", status)
-
-        # If game not over then continue
-        if(status == 'GAME NOT OVER'): 
-            
-            print_mat(mat)
-
-            add_new(mat)
-            
-            set_entries()
-            update_colors(mat)
-
-            status = get_current_state(mat)
-            print("After adding new:", status)
-            print_mat(mat)
-            if status == "LOST":
-                root.destroy()
-
-        # Else break the loop
-        else:
+        print("After adding new:", status)
+        print_mat(mat)
+        if status == "LOST":
             root.destroy()
 
-move_up_command = commands('move_up', move_up)
-move_left_command = commands('move_left', move_left)
-move_down_command = commands('move_down', move_down)
-move_right_command = commands('move_right', move_right)
+    # Else break the loop
+    else:
+        root.destroy()
 
-move_up_command1 = move_up_command.run_func
+def move_down_command(_event):
+
+    global mat
+    current_mat = list(mat)
+
+    # Get the current state and print it
+    status = get_current_state(mat) 
+    print("Initially:", status)
+    print_mat(mat)
+
+    # If game not over then continue
+    if(status == 'LOST'): 
+        root.destroy()
+        return
+
+    # Move down
+    mat, flag = move_down(mat)
+    if flag == False:
+        print("No change was made, try another move")
+        mat = list(current_mat)
+        print_mat(mat)
+        return
+
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("After move:", status)
+
+    # If game not over then continue
+    if(status == 'GAME NOT OVER'): 
+
+        print_mat(mat)
+
+        add_new(mat)
+        
+        set_entries()
+        update_colors(mat)
+
+        status = get_current_state(mat)
+        print("After adding new:", status)
+        print_mat(mat)
+        if status == "LOST":
+            root.destroy()
+    
+    # Else break the loop
+    else: 
+        root.destroy()
+
+def move_left_command(_event):
+
+    global mat
+    current_mat = list(mat)
+
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("Initially:", status)
+    print_mat(mat)
+
+    # If game not over then continue
+    if(status == 'LOST'): 
+        root.destroy()
+        return
+
+    # Move left
+    mat, flag = move_left(mat)
+    if flag == False:
+        print("No change was made, try another move")
+        mat = list(current_mat)
+        print_mat(mat)
+        return
+
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("After move:", status)
+
+    # If game not over then continue
+    if(status == 'GAME NOT OVER'):
+
+        print_mat(mat)
+
+        add_new(mat)
+    
+        set_entries()
+        update_colors(mat)
+
+        status = get_current_state(mat)
+        print("After adding new:", status)
+        print_mat(mat)
+        if status == "LOST":
+            root.destroy()
+    
+    # Else break the loop
+    else: 
+        root.destroy()
+
+def move_right_command(_event):
+
+    global mat
+    current_mat = list(mat)
+
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("Initially:", status)
+    print_mat(mat)
+
+    # If game not over then continue
+    if(status == 'LOST'): 
+        root.destroy()
+        return
+
+    # Move right
+    mat, flag = move_right(mat)
+    if flag == False:
+        print("No change was made, try another move")
+        mat = list(current_mat)
+        print_mat(mat)
+        return
+
+    # Get the current state and print it 
+    status = get_current_state(mat) 
+    print("After move:", status)
+
+    # If game not over then continue
+    if(status == 'GAME NOT OVER'):
+
+        print_mat(mat)
+
+        add_new(mat)
+        
+        set_entries()
+        update_colors(mat)
+
+        status = get_current_state(mat)
+        print("After adding new:", status)
+        print_mat(mat)
+        if status == "LOST":
+            root.destroy()
+    
+    # Else break the loop
+    else: 
+        root.destroy()
 
 # Bind keys to commands
-root.bind('w', commands('move_up', move_up).run_func)
-root.bind('a', commands('move_up', move_left).run_func)
-root.bind('s', commands('move_up', move_down).run_func)
-root.bind('d', commands('move_up', move_right).run_func)
+root.bind('w', move_up_command)
+root.bind('a', move_left_command)
+root.bind('s', move_down_command)
+root.bind('d', move_right_command)
 
 root.mainloop()
