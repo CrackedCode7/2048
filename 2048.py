@@ -225,8 +225,8 @@ root.geometry("1450x1000+0+0")
 total_score_label = tk.Label(root, text="Score", justify='center', font=('arial', 25))
 total_score_label.place(height=100, width=250, x=1100, y=0)
 
-total_score_entry = tk.Entry(root, justify='center', font=('arial', 100, 'bold'))
-total_score_entry.place(height=250, width=250, x=1100, y=100)
+total_score_entry = tk.Entry(root, justify='center', font=('arial', 50, 'bold'))
+total_score_entry.place(height=250, width=350, x=1050, y=100)
 
 entries = {}
 for i in range(4):
