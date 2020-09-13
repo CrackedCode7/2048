@@ -219,22 +219,22 @@ def set_entries():
     total_score_entry.insert(0, total_score)
 
 root = tk.Tk()
-root.geometry("1450x1000+0+0")
+root.geometry("1920x1080+0+0")
 
 # Add total score entry and entries for the tiles
 total_score_label = tk.Label(root, text="Score", justify='center', font=('arial', 25))
-total_score_label.place(height=100, width=250, x=1100, y=0)
+total_score_label.place(height=100, width=350, x=700, y=0)
 
-total_score_entry = tk.Entry(root, justify='center', font=('arial', 50, 'bold'))
-total_score_entry.place(height=250, width=350, x=1050, y=100)
+total_score_entry = tk.Entry(root, justify='center', font=('arial', 25, 'bold'))
+total_score_entry.place(height=150, width=350, x=700, y=100)
 
 entries = {}
 for i in range(4):
     for j in range(4):
-        x=j*250
-        y=i*250
-        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', 100, 'bold'), bg='Red')
-        entries["row" + str(i+1) + "col" + str(j+1)].place(height=250, width=250, x=x, y=y)
+        x=j*150
+        y=i*150
+        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', 35, 'bold'), bg='Red')
+        entries["row" + str(i+1) + "col" + str(j+1)].place(height=150, width=150, x=x, y=y)
 
 mat = new_game()
 set_entries()
