@@ -1,6 +1,8 @@
 import random
 import numpy as np
 import tkinter as tk
+import re
+from screeninfo import get_monitors
 
 colormap = {}
 colormap['0'] = 'black'
@@ -219,24 +221,47 @@ def set_entries():
     total_score_entry.insert(0, total_score)
 
 root = tk.Tk()
-screen_width = int(input("Enter screen width in pixels: "))
-screen_height = int(input("Enter screen height in pixels: "))
-root.geometry(str(int(screen_width/2))+"x"+str(int(screen_height/2))+"+0+0")
+
+# Set the geometry of the root window using the monitor size
+
+i=0
+j=0
+for m in get_monitors():
+
+    if i>0:
+        break
+    else:
+        lst = str(m).split(',')
+        for item in lst:
+            if j == 2:
+                temp = re.findall(r'\d+', item.strip()) 
+                res = list(map(int, temp))
+                for k in res:
+                    screen_width = int(k)
+            if j == 3:
+                temp = re.findall(r'\d+', item.strip()) 
+                res = list(map(int, temp))
+                for k in res:
+                    screen_height = int(k)
+            j+=1
+    i+=1
+
+root.geometry(str(int(screen_width*.7))+"x"+str(int(screen_height*.8))+"+0+0")
 
 # Add total score entry and entries for the tiles
-total_score_label = tk.Label(root, text="Score", justify='center', font=('arial', int(screen_height/43), 'bold'))
-total_score_label.place(height=int(.1*screen_height), width=int(.2*screen_height), x=.25*screen_width, y=0)
+total_score_label = tk.Label(root, text="Score", justify='center', font=('arial', int(screen_height/30), 'bold'))
+total_score_label.place(height=int(.1*screen_height), width=int(.2*screen_height), x=.5*screen_width, y=0)
 
-total_score_entry = tk.Entry(root, justify='center', font=('arial', int(screen_height/43), 'bold'))
-total_score_entry.place(height=int(.1*screen_height), width=int(.2*screen_height), x=.25*screen_width, y=.1*screen_height)
+total_score_entry = tk.Entry(root, justify='center', font=('arial', int(screen_height/30), 'bold'))
+total_score_entry.place(height=int(.1*screen_height), width=int(.2*screen_height), x=.5*screen_width, y=.1*screen_height)
 
 entries = {}
 for i in range(4):
     for j in range(4):
-        x=int(j*.1*screen_height)
-        y=int(i*.1*screen_height)
-        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', int(screen_height/40), 'bold'), bg='Red')
-        entries["row" + str(i+1) + "col" + str(j+1)].place(height=int(.1*screen_height), width=int(.1*screen_height), x=x, y=y)
+        x=int(j*.2*screen_height)
+        y=int(i*.2*screen_height)
+        entries["row" + str(i+1) + "col" + str(j+1)] = tk.Entry(root, justify='center', font=('arial', int(screen_height/25), 'bold'), bg='Red')
+        entries["row" + str(i+1) + "col" + str(j+1)].place(height=int(.2*screen_height), width=int(.2*screen_height), x=x, y=y)
 
 mat = new_game()
 set_entries()
@@ -259,8 +284,10 @@ class commands:
         print_mat(mat)
 
         # If game not over then continue
-        if(status == 'LOST'): 
-            root.destroy()
+        if(status == 'LOST'):
+            lost_entry = tk.Entry(root, justify='center', font=('arial', int(screen_height/30), 'bold'))
+            lost_entry.insert(0, "GAME OVER")
+            lost_entry.place(height=int(.1*screen_height), width=int(.3*screen_height), x=.475*screen_width, y=.3*screen_height)
             return
         
         # Move
@@ -290,7 +317,9 @@ class commands:
             print("After adding new:", status)
             print_mat(mat)
             if status == "LOST":
-                root.destroy()
+                lost_entry = tk.Entry(root, justify='center', font=('arial', int(screen_height/30), 'bold'))
+                lost_entry.insert(0, "GAME OVER")
+                lost_entry.place(height=int(.1*screen_height), width=int(.3*screen_height), x=.475*screen_width, y=.3*screen_height)
 
         # Else break the loop
         else:
@@ -301,12 +330,10 @@ move_left_command = commands('move_left', move_left)
 move_down_command = commands('move_down', move_down)
 move_right_command = commands('move_right', move_right)
 
-move_up_command1 = move_up_command.run_func
-
 # Bind keys to commands
-root.bind('w', commands('move_up', move_up).run_func)
-root.bind('a', commands('move_up', move_left).run_func)
-root.bind('s', commands('move_up', move_down).run_func)
-root.bind('d', commands('move_up', move_right).run_func)
+root.bind('w', move_up_command.run_func)
+root.bind('a', move_left_command.run_func)
+root.bind('s', move_down_command.run_func)
+root.bind('d', move_right_command.run_func)
 
 root.mainloop()
